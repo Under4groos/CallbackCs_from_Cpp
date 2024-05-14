@@ -1,26 +1,10 @@
 # Call methods C# from C++ 
 
-Магия C++ b C#.
+Magic C# and C++ 
 
 Была задача, реализовать хук на С++ который отслеживал бы нашу мышку и вызывал метод из C#
 
-
-Magic C# and C++ 
-```cs
-#CS file 
-[UnmanagedFunctionPointer(CallingConvention.StdCall)]
-public delegate void ___event_callback(int value);
-
-#---- Dll import 
-#Path Dynamic Dll
-[DllImport(@"calllib.dll")] 
-public static extern void ___cell(
-   [MarshalAs(UnmanagedType.FunctionPtr)] ___event_callback ___event_callback
-   );
-```
-
-
-Create a new file in the project "Helper.cpp"
+### Helper.Cpp
 ```cpp
 #ifdef __cplusplus
 extern "C"
@@ -37,9 +21,7 @@ extern "C"
 }
 #endif
 
-#Дгика нашей функции которую мы вызываем из под С# которая 
-#послу вызывает наш метот из C# 
-
+#Функция вызываемая из под С# которая вызывает наш метот из C#
 DLL void ___cell_function(___event_callback_INT ___event_callback_int, ___event_callback ___event_callback)
 {
 	if (___event_callback)
@@ -49,4 +31,30 @@ DLL void ___cell_function(___event_callback_INT ___event_callback_int, ___event_
 	}
 }
 
+```
+
+### Helper.cs
+```cs
+[UnmanagedFunctionPointer(CallingConvention.StdCall)]
+public delegate void ___event_callback(int value);
+
+#---- Dll import 
+#Path Dynamic Dll
+[DllImport(@"calllib.dll")] 
+public static extern void ___cell(
+   [MarshalAs(UnmanagedType.FunctionPtr)] ___event_callback ___event_callback
+   );
+```
+
+
+### main.cs
+```cs
+using CallbackCs_from_Cpp;
+
+Helper.___cell((i) =>
+{
+    Console.WriteLine(i);
+});
+
+Console.ReadLine();
 ```
